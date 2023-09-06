@@ -1,0 +1,39 @@
+[
+  {
+    "testName": "navigateToMenuItems",
+    "navigateMenuHierarchy": "Gear:Watches"
+  },
+  {
+    "testName": "applyFilter",
+    "filters": [
+      {
+        "filterName": "Material",
+        "filterValue": "Metal"
+      }
+    ]
+  },{
+  "testName": "addItemsToCart",
+  "items": [
+    {
+      "name": "Summit Watch",
+      "quantity": "1"
+    },{
+      "name": "Endurance Watch",
+      "quantity": "1"
+    }
+  ]
+},{
+  "testName": "increaseQuantityInCheckoutPage",
+  "items": [
+    {
+      "name": "Summit Watch",
+      "oldQuantity": "1",
+      "newQuantity": "2"
+    },{
+      "name": "Endurance Watch",
+      "oldQuantity": "1",
+      "newQuantity": "3"
+    }
+  ]
+}
+]

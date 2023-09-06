@@ -1,0 +1,68 @@
+[
+  {
+    "testName": "AddProductTest",
+    "navigateMenuHierarchy": "Gear:Watches",
+    "filters": [
+      {
+        "filterName": "Material",
+        "filterValue": "Metal"
+      }
+    ],
+    "itemsToBeAdded": [
+      {
+        "name": "Summit Watch",
+        "quantity": "1"
+      },
+      {
+        "name": "Endurance Watch",
+        "quantity": "1"
+      }
+    ],
+    "itemsToBeUpdated": [
+      {
+        "name": "Summit Watch",
+        "oldQuantity": "1",
+        "newQuantity": "2"
+      },
+      {
+        "name": "Endurance Watch",
+        "oldQuantity": "1",
+        "newQuantity": "3"
+      }
+    ],
+    "shippingEstimateCountry": "United States",
+    "shippingEstimateState": "Arizona",
+    "shippingEstimateZipCode": "12345",
+    "shippingAddressStreet": "Street1",
+    "shippingAddressCity": "City1",
+    "shippingAddressState": "Alabama",
+    "shippingAddressZipCode": "63636",
+    "shippingAddressCountry": "United States",
+    "shippingAddressPhoneNumber": "97397923729"
+  },
+  {
+    "testName": "NegativeTest",
+    "navigateMenuHierarchy": "Gear:Watches",
+    "checkoutCartURL": "",
+    "checkoutShippingURL": "https://magento.softwaretestingboard.com/checkout/#shipping",
+    "checkoutPaymentURL": "https://magento.softwaretestingboard.com/checkout/#payment",
+    "itemsToBeAdded": [
+      {
+        "name": "Summit Watch",
+        "quantity": "1"
+      }
+    ],
+    "shippingEmailAddress": "davidj@gmail.com",
+    "firstName": "David",
+    "lastName": "Jones",
+    "shippingAddressStreet": "Street",
+    "shippingAddressCity": "City",
+    "shippingAddressState": "Arizona",
+    "shippingAddressZipCode": "63635",
+    "shippingAddressCountry": "United States",
+    "shippingAddressPhoneNumber": "97397923720"
+  },
+  {
+    "testName": "SecurityTest"
+  }
+]

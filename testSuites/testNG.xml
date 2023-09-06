@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+    <listeners>
+        <listener class-name="com.magento.core.utils.Listeners"/>
+    </listeners>
+    <test name="Place Order Tests">
+        <classes>
+            <class name="com.magento.scripts.PlaceOrderWithSignInTest" />
+            <class name="com.magento.scripts.PlaceOrderWithoutSignInTest" />
+        </classes>
+    </test>
+    <test name="Security Tests">
+        <classes>
+            <class name="com.magento.scripts.SessionValidationOnSignOutTest" />
+            <class name="com.magento.scripts.XSSVulnerabilityTest" />
+            <class name="com.magento.scripts.SQLInjectionTest" />
+        </classes>
+    </test>
+</suite>
