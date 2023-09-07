@@ -23,6 +23,10 @@ public class SignOutPage extends AbstractPage {
         waitForElementToBeDisplayed(storeLogo);
     }
 
+    /*
+        Validate text on the Sign Out page.
+     */
+
     public void validateTextInSignOutPage(){
         waitForElementToBeDisplayed(signOutText);
         waitForElementToBeDisplayed(signOutMessage);

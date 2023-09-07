@@ -4,6 +4,7 @@ import com.magento.core.constants.CommonFilePaths;
 import com.magento.core.pages.*;
 import com.magento.core.utils.Hooks;
 import com.magento.core.utils.JSONUtils;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Map;
@@ -18,7 +19,7 @@ public class PlaceOrderWithoutSignInTest extends Hooks {
 
     @Test(testName = "Navigate to watches section")
     public void navigateToMenuSection() {
-        data = JSONUtils.convertJSONToMap(CommonFilePaths.testDataFilePath, "NegativeTest");
+        data = JSONUtils.convertJSONToMap(CommonFilePaths.testDataFilePath, "PlaceOrderWithoutSignIn");
         LandingPage landingPage = new LandingPage(driver.get());
         landingPage.waitForPageLoad();
         megaMenuPage = new MegaMenuPage(driver.get());

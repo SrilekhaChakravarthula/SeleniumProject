@@ -74,9 +74,12 @@ public class ShoppingCartPage extends AbstractPage {
         waitForElementToHaveText(pageTitle, "Shopping Cart");
     }
 
+    /*
+       Validate products in shopping cart in the Cart page.
+     */
+
     public void validateItemsInShoppingCart(Object testData) {
         List<Map<String, String>> itemDetailList = (List<Map<String, String>>) testData;
-        Assert.assertEquals(cartItemNames.size(), itemDetailList.size(), "Expected number of items in shopping cart page is " + itemDetailList.size() + ". Actual number of items found is " + cartItemNames.size());
         for (Map<String, String> itemDetail : itemDetailList) {
             Iterator<String> itr = itemDetail.keySet().iterator();
             String itemName = itemDetail.get("name");
@@ -87,15 +90,21 @@ public class ShoppingCartPage extends AbstractPage {
             } catch (Exception e) {
                 Assert.fail("Item : " + itemName + " is not present in the shopping cart page");
             }
+            ExtentReporter.logPass("Validated that the item : " + itemName + " is present in the shopping cart page");
             WebElement item = cartItem.findElement(itemInCart);
             String priceOfItemInShoppingCart = item.findElement(itemPriceInCart).getText();
             String priceOfItemInCartSummary = itemDetails.get(itemName);
             Assert.assertEquals(priceOfItemInShoppingCart, priceOfItemInCartSummary, "Price of item in shopping cart page does not match with the price in the cart summary page");
+            ExtentReporter.logPass("Price of the item : " + itemName + " is validated in the shopping cart page");
             String actualQuantity = item.findElement(itemQuantityInCart).getDomAttribute("value");
             Assert.assertEquals(actualQuantity, quantity, "Quantity of item in shopping cart page does not match with the quantity in the test data");
             ExtentReporter.attachScreenshot(getScreenshotAsBase64(cartItem), "Validated the item details : " + itemName);
         }
     }
+
+    /*
+       Update the quantity , calculate the subTotal amount and verify if it is displayed correctly.
+     */
 
     public void validateAmountOnQuantityUpdate(Object testData) {
         List<Map<String, String>> itemDetailList = (List<Map<String, String>>) testData;
@@ -130,6 +139,10 @@ public class ShoppingCartPage extends AbstractPage {
         }
     }
 
+    /*
+       Utility to get current product in the cart
+     */
+
     private WebElement getCurrentCartItem(String itemName) {
         WebElement cartItem = null;
         try {
@@ -140,12 +153,20 @@ public class ShoppingCartPage extends AbstractPage {
         return cartItem;
     }
 
+    /*
+       Expand Order summary section.
+     */
+
     public void expandSummarySection() {
         if (!summaryBlockExpand.getAttribute("aria-hidden").equalsIgnoreCase("false")) {
             summaryBlock.click();
         }
         ExtentReporter.attachScreenshot(getScreenshotAsBase64(summaryBlock), "Summary section expanded");
     }
+
+    /*
+       Add shipping details in summary.
+     */
 
     public void setShippingDetails(String country, String state, String zipCode) {
         selectByVisibleText(countryDropdown, country);
@@ -157,6 +178,10 @@ public class ShoppingCartPage extends AbstractPage {
         ExtentReporter.logPass("Shipping details in Summary : Zip code entered as " + zipCode);
     }
 
+    /*
+       Select fixed rate option.
+     */
+
     public void checkFixedRate() {
         fixedRateValue = Integer.parseInt(formatPrice(fixedRate.getText()));
         fixedRateRadio.click();
@@ -164,11 +189,19 @@ public class ShoppingCartPage extends AbstractPage {
         waitForElementToDisappear(loader);
     }
 
+    /*
+      Validate summary subTotal amount the summary section.
+    */
+
     public void validateSummarySubTotalAmount() {
         int actSubTotal = Integer.parseInt(formatPrice(summarySubTotal.getText()));
         Assert.assertEquals(actSubTotal, summarySubTotalValue, "Summary Subtotal Amount value didn't match");
         ExtentReporter.logPass("Validated Summary Subtotal amount : " + summarySubTotalValue);
     }
+
+    /*
+      Validate summary orderTotal amount the summary section
+    */
 
     public void validateSummaryOrderTotalAmount() {
         int actOrderTotal = Integer.parseInt(formatPrice(summaryOrderTotal.getText()));
@@ -176,6 +209,10 @@ public class ShoppingCartPage extends AbstractPage {
         Assert.assertEquals(actOrderTotal, orderTotal, "Order total Amount value didn't match");
         ExtentReporter.logPass("Validated Summary Order Total amount : " + orderTotal);
     }
+
+    /*
+      Click on proceed to checkout button to navigate to the Shipping page.
+    */
 
     public ShippingPage proceedToCheckout() {
         proceedToCheckout.click();

@@ -11,57 +11,63 @@ import com.google.common.base.Throwables;
 import org.testng.ITestResult;
 
 public class ExtentReporter {
+    public static ThreadLocal<ExtentSparkReporter> eSparkReporter = new ThreadLocal<>();
+    public static InheritableThreadLocal<ExtentReports> eReports = new InheritableThreadLocal<>();
+    public static ThreadLocal<ExtentTest> eTest = new ThreadLocal<>();
     private static ExtentReports extentReport;
     private static ExtentTest extentTest;
 
     public static void init() {
         String path = System.getProperty("user.dir") + "/target/extentReport.html";
         ExtentSparkReporter sparkReporter = new ExtentSparkReporter(path);
-        sparkReporter.config().setReportName("Test Automation Report");
-        sparkReporter.config().setDocumentTitle("Automation Report");
+        eSparkReporter.set(sparkReporter);
+        eSparkReporter.get().config().setReportName("Test Automation Report");
+        eSparkReporter.get().config().setDocumentTitle("Automation Report");
 
         extentReport = new ExtentReports();
-        extentReport.attachReporter(sparkReporter);
-        extentReport.setSystemInfo("user", "srilekha");
-        extentReport.setSystemInfo("system", "windows");
+        eReports.set(extentReport);
+        eReports.get().attachReporter(sparkReporter);
+        eReports.get().setSystemInfo("user", "srilekha");
+        eReports.get().setSystemInfo("system", "windows");
     }
 
     public static void createTest(String testName) {
         extentTest = extentReport.createTest(testName);
+        eTest.set(extentTest);
     }
 
     public static void assignTestCategory(String categoryName) {
-        extentTest.assignCategory(categoryName);
+        eTest.get().assignCategory(categoryName);
     }
 
     public static void logInfo(String message) {
-        extentTest.log(Status.INFO, message);
+        eTest.get().log(Status.INFO, message);
     }
 
     public static void logPass(String message) {
-        extentTest.log(Status.PASS, message);
+        eTest.get().log(Status.PASS, message);
     }
 
     public static void logFail(ITestResult result) {
-        extentTest.log(Status.FAIL, MarkupHelper.createLabel(result.getName()+" - Test Case Failed", ExtentColor.RED));
-        extentTest.log(Status.FAIL,MarkupHelper.createCodeBlock(Throwables.getStackTraceAsString(result.getThrowable())));
+        eTest.get().log(Status.FAIL, MarkupHelper.createLabel(result.getName()+" - Test Case Failed", ExtentColor.RED));
+        eTest.get().log(Status.FAIL,MarkupHelper.createCodeBlock(Throwables.getStackTraceAsString(result.getThrowable())));
     }
 
     public static void logSkip(String message) {
-        extentTest.log(Status.SKIP, message);
+        eTest.get().log(Status.SKIP, message);
     }
 
     public static void logWarn(String message) {
-        extentTest.log(Status.WARNING, message);
+        eTest.get().log(Status.WARNING, message);
     }
 
     public static void attachScreenshot(String base64String){
-        extentTest.info(MediaEntityBuilder.createScreenCaptureFromBase64String(base64String,"Screenshot").build());
+        eTest.get().info(MediaEntityBuilder.createScreenCaptureFromBase64String(base64String,"Screenshot").build());
     }
     public static void attachScreenshot(String base64String,String title){
-        extentTest.info(MediaEntityBuilder.createScreenCaptureFromBase64String(base64String,title).build());
+        eTest.get().info(MediaEntityBuilder.createScreenCaptureFromBase64String(base64String,title).build());
     }
     public static void flushReport() {
-        extentReport.flush();
+        eReports.get().flush();
     }
 }

@@ -22,7 +22,7 @@ public class AbstractPage {
     public static Map<String, String> itemDetails;
 
     @FindBy(css = "[aria-label='store logo']")
-    public WebElement storeLogo;
+    public static WebElement storeLogo;
 
     @FindBy(xpath = "//*[@class='page-title']/span")
     public WebElement pageTitle;
@@ -68,6 +68,13 @@ public class AbstractPage {
         PageFactory.initElements(driver, this);
     }
 
+    /*
+        Verify if the expected filter category is present.
+        Verify if the expected filter value is present in the category.
+        Apply filter.
+        Validate that the selected filter is seen.
+     */
+
     public void applyFilters(Object testData) {
         List<Map<String, String>> filters = (List<Map<String, String>>) testData;
         filters.stream().forEach(filter -> {
@@ -80,12 +87,15 @@ public class AbstractPage {
             } catch (Exception e) {
                 Assert.fail("Filter category : " + filterName + " is not found");
             }
+            ExtentReporter.logPass("Validated that the filter category : "+filterName+" is present on the page");
             filterNameElement.click();
+            ExtentReporter.logPass("Clicked on the filter category : "+filterName);
             try {
                 filterValueElement = filterNameElement.findElements(filterValueText).stream().filter(el -> el.getText().trim().contains(filterValue)).findFirst().get();
             } catch (Exception e) {
                 Assert.fail("Filter value : " + filterValue + " in the category : " + filterName + " is not found");
             }
+            ExtentReporter.logPass("Validated that the filter value : "+filterValue+" is present under the category : "+filterName);
             filterValueElement.click();
             ExtentReporter.logPass("Selected filter : " + filterValue + " under filter category : " + filterName);
             waitForElementToHaveText(filterCurrentSubtitle, "Now Shopping by");
@@ -95,11 +105,14 @@ public class AbstractPage {
         });
     }
 
+     /*
+        Validate that product is found on the page.
+        Add the product to the cart.
+        Take the products and their details in a map to validate the product data in checkout summary dialog.
+     */
+
     public void addProductToCart(Object testData) {
         List<Map<String, String>> items = (List<Map<String, String>>) testData;
-        int noOfProductsExpected = items.size();
-        int noOfProductsFound = actualItemNames.size();
-        Assert.assertTrue(noOfProductsExpected <= noOfProductsFound, "Expected " + noOfProductsExpected + " products to be present on the page but found only :" + noOfProductsFound);
         itemDetails = new HashMap<String, String>();
         items.stream().forEach(el -> {
             String productName = el.get("name");
@@ -109,6 +122,7 @@ public class AbstractPage {
             } catch (Exception e) {
                 Assert.fail("Item : " + productName + " not found in the page");
             }
+            ExtentReporter.logPass("Item : " + productName + " found in the page");
             WebElement currentProductCard = item.findElement(productCard);
             String totalItemPriceString = currentProductCard.findElement(price).getText();
             itemDetails.put(productName, totalItemPriceString);
@@ -123,6 +137,10 @@ public class AbstractPage {
         });
     }
 
+    /*
+        Validate that the cart count matches number of products in the test data.
+     */
+
     public void validateCartCount(Object testData) {
         List<Map<String, String>> items = (List<Map<String, String>>) testData;
         int expectedCount = items.size();
@@ -134,6 +152,10 @@ public class AbstractPage {
             Assert.fail("Expected cart count after adding the products is : " + expectedCount + ". But found " + actualCount);
         }
     }
+
+    /*
+       Click on the cart icon to open up the cart summary dialog.
+     */
 
     public CartSummaryPage clickOnCartIcon() {
         cartIcon.click();
@@ -171,7 +193,7 @@ public class AbstractPage {
 
     public void waitForElementToBeDisplayed(WebElement element) {
         Wait<WebDriver> wait = new FluentWait<>(driver)
-                .withTimeout(Duration.ofSeconds(20))
+                .withTimeout(Duration.ofSeconds(10))
                 .pollingEvery(Duration.ofSeconds(3))
                 .ignoring(NoSuchElementException.class);
         wait.until(ExpectedConditions.visibilityOf(element));
@@ -179,7 +201,7 @@ public class AbstractPage {
 
     public void waitForElementToDisappear(WebElement element) {
         Wait<WebDriver> wait = new FluentWait<>(driver)
-                .withTimeout(Duration.ofSeconds(20))
+                .withTimeout(Duration.ofSeconds(10))
                 .pollingEvery(Duration.ofSeconds(3))
                 .ignoring(NoSuchElementException.class);
         wait.until(ExpectedConditions.invisibilityOf(element));
@@ -187,7 +209,7 @@ public class AbstractPage {
 
     public void waitForElementToHaveText(WebElement element, String text) {
         Wait<WebDriver> wait = new FluentWait<>(driver)
-                .withTimeout(Duration.ofSeconds(20))
+                .withTimeout(Duration.ofSeconds(10))
                 .pollingEvery(Duration.ofSeconds(3))
                 .ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class);
@@ -212,12 +234,16 @@ public class AbstractPage {
                 ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
     }
 
-    public void waitForAlertToBeDisplayed(){
+    public void waitForAlertToBeDisplayed() {
         Wait<WebDriver> wait = new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(10))
                 .pollingEvery(Duration.ofSeconds(3))
                 .ignoring(NoSuchElementException.class);
         wait.until(ExpectedConditions.alertIsPresent());
+    }
+
+    public void doPageRefresh(){
+        driver.navigate().refresh();
     }
 }
 

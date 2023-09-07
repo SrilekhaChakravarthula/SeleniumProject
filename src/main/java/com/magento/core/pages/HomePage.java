@@ -30,6 +30,11 @@ public class HomePage extends AbstractPage {
         ExtentReporter.logPass("Validated greeting message on sign in");
     }
 
+    /*
+        Verify if Sign Out option is present in the customer menu.
+        Click on Sign Out.
+     */
+
     public SignOutPage signOut() {
         customerMenu.click();
         WebElement signOut = null;
@@ -38,6 +43,7 @@ public class HomePage extends AbstractPage {
         } catch (Exception e) {
             Assert.fail("Sign out option not present in the customer menu dropdown");
         }
+        ExtentReporter.logPass("Clicked on SignOut");
         signOut.click();
         return new SignOutPage(driver);
     }

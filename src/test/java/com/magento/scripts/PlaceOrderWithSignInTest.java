@@ -20,7 +20,7 @@ public class PlaceOrderWithSignInTest extends Hooks {
 
     @Test(testName = "Log in to the application")
     public void signInToApplication() {
-        data = JSONUtils.convertJSONToMap(CommonFilePaths.testDataFilePath, "AddProductTest");
+        data = JSONUtils.convertJSONToMap(CommonFilePaths.testDataFilePath, "PlaceOrderWithSignIn");
         LandingPage landingPage = new LandingPage(driver.get());
         signInPage = landingPage.navigateToSignInPage();
         signInPage.doSignIn();
@@ -85,6 +85,5 @@ public class PlaceOrderWithSignInTest extends Hooks {
         reviewAndPaymentsPage.placeOrder();
         reviewAndPaymentsPage.validateOrderIsPlacedSuccessfully();
         reviewAndPaymentsPage.validateOrderNumberIsGenerated();
-
     }
 }

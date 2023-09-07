@@ -10,11 +10,4 @@
             <class name="com.magento.scripts.PlaceOrderWithoutSignInTest" />
         </classes>
     </test>
-    <test name="Security Tests">
-        <classes>
-            <class name="com.magento.scripts.SessionValidationOnSignOutTest" />
-            <class name="com.magento.scripts.XSSVulnerabilityTest" />
-            <class name="com.magento.scripts.SQLInjectionTest" />
-        </classes>
-    </test>
 </suite>

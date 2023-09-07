@@ -9,12 +9,11 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import java.util.List;
-import java.util.Optional;
 
 public class MegaMenuPage extends AbstractPage {
     @FindBy(xpath = "//*[@id='store.menu']//nav/ul/li/a")
     private List<WebElement> megaMenuBar;
-    By childUl = By.xpath("./following-sibling::ul");
+    By siblingUl = By.xpath("./following-sibling::ul");
     By listAnchor = By.xpath("./li/a");
 
     public MegaMenuPage(WebDriver driver) {
@@ -22,8 +21,12 @@ public class MegaMenuPage extends AbstractPage {
         PageFactory.initElements(driver, this);
     }
 
-    public void navigateToItemsInMegaMenu(String itemHierarchyWithDelimiter) {
-        String[] itemHierarchy = itemHierarchyWithDelimiter.split(":");
+    /*
+       Navigate to any item in the Mega menu by passing in the menu hierarchy delimited by ':' as a parameter
+     */
+
+    public void navigateToItemsInMegaMenu(String menuHierarchyWithDelimiter) {
+        String[] itemHierarchy = menuHierarchyWithDelimiter.split(":");
         int levels = itemHierarchy.length;
         WebElement parent = null;
         String menuHierarchy = itemHierarchy[0];
@@ -32,6 +35,7 @@ public class MegaMenuPage extends AbstractPage {
         } catch (Exception e) {
             Assert.fail(menuHierarchy + " not found in the mega menu bar");
         }
+        ExtentReporter.logPass(menuHierarchy + " is found in the mega menu bar");
         if (levels == 0) {
             parent.click();
         } else {
@@ -40,10 +44,11 @@ public class MegaMenuPage extends AbstractPage {
                 menuHierarchy =menuHierarchy+" : "+itemHierarchy[i];
                 List<WebElement> children = null;
                 try {
-                    children = parent.findElement(childUl).findElements(listAnchor);
+                    children = parent.findElement(siblingUl).findElements(listAnchor);
                 } catch (Exception e) {
                     Assert.fail(itemHierarchy[i] + " not found in the menu hierarchy " +menuHierarchy);
                 }
+                ExtentReporter.logPass(itemHierarchy[i] + " found in the menu hierarchy " +menuHierarchy);
                 boolean childFound = false;
                 for (WebElement el : children) {
                     if (el.getText().equalsIgnoreCase(itemHierarchy[i])) {
@@ -54,6 +59,7 @@ public class MegaMenuPage extends AbstractPage {
                     }
                 }
                 Assert.assertTrue(childFound,itemHierarchy[i] + " not found in the menu hierarchy " + itemHierarchy[i - 1]);
+                ExtentReporter.logPass(itemHierarchy[i] + " found in the menu hierarchy " + itemHierarchy[i - 1]);
             }
             parent.click();
             ExtentReporter.attachScreenshot(getScreenshotAsBase64(), "Navigated to " + menuHierarchy);

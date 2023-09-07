@@ -1,6 +1,6 @@
 [
   {
-    "testName": "AddProductTest",
+    "testName": "PlaceOrderWithSignIn",
     "navigateMenuHierarchy": "Gear:Watches",
     "filters": [
       {
@@ -41,7 +41,7 @@
     "shippingAddressPhoneNumber": "97397923729"
   },
   {
-    "testName": "NegativeTest",
+    "testName": "PlaceOrderWithoutSignIn",
     "navigateMenuHierarchy": "Gear:Watches",
     "checkoutCartURL": "",
     "checkoutShippingURL": "https://magento.softwaretestingboard.com/checkout/#shipping",
@@ -63,6 +63,9 @@
     "shippingAddressPhoneNumber": "97397923720"
   },
   {
-    "testName": "SecurityTest"
+    "testName": "LoginValidations",
+    "invalidUserName": "john",
+    "incorrectUserName": "john@gmail.com",
+    "incorrectPassword": "jo"
   }
 ]

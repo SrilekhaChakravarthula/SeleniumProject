@@ -81,23 +81,39 @@ public class ShippingPage extends AbstractPage {
         waitForElementToBeDisplayed(shippingAddressTitle);
     }
 
+    /*
+       Validate the shipping address with the shipping address details present in the test data.
+     */
+
     public void validateShippingAddress(Map<String, Object> data) {
         String addressText = shippingAddress.getDomProperty("innerText");
         String[] allData = addressText.split("\\n");
         String expFullName = environment.getFirstName() + " " + environment.getLastName();
         Assert.assertEquals(allData[0], expFullName, "Full Name didn't match");
+        ExtentReporter.logPass("Validated full name in shipping address");
         Assert.assertEquals(allData[1], data.get("shippingAddressStreet"), "Street Name didn't match");
+        ExtentReporter.logPass("Validated shipping address street in shipping address");
         String expCityStateZipName = data.get("shippingAddressCity") + ", " + data.get("shippingAddressState") + " " + data.get("shippingAddressZipCode");
         Assert.assertEquals(allData[2], expCityStateZipName, "CityStateZipName didn't match");
+        ExtentReporter.logPass("Validated city,state and zip code in shipping address");
         Assert.assertEquals(allData[3], data.get("shippingAddressCountry"), "Country didn't match");
+        ExtentReporter.logPass("Validated country in shipping address");
         Assert.assertEquals(allData[4], data.get("shippingAddressPhoneNumber"), "Phone Number didn't match");
         ExtentReporter.attachScreenshot(getScreenshotAsBase64(shippingAddress), "Validated all the details in Shipping Address");
     }
+
+    /*
+       Validate that the Fixed shipping method is selected.
+     */
 
     public void validateFixedShippingMethodIsSelected() {
         Assert.assertTrue(fixedShippingMethod.isSelected(), "Fixed Shipping method is not selected");
         ExtentReporter.logPass("Validated that the fixed rate radio button is turned on");
     }
+
+    /*
+       Validate the product count in the shipping page
+     */
 
     public void validateItemsCount() {
         int expQuantity = 0;
@@ -110,12 +126,20 @@ public class ShippingPage extends AbstractPage {
         ExtentReporter.logPass("Validated the items count : " + itemsCount);
     }
 
+    /*
+       Expand Order Summary section to validate the details in it
+     */
+
     public void expandOrderSummary() {
         if (!itemsInCartHeader.getAttribute("aria-expanded").equalsIgnoreCase("true")) {
             itemsInCartHeader.click();
         }
         ExtentReporter.logPass("Order summary expanded");
     }
+
+    /*
+       Validate the Order summary details
+     */
 
     public void validateOrderSummary() {
         totalProducts.forEach(ele -> {
@@ -124,11 +148,17 @@ public class ShippingPage extends AbstractPage {
             String price = ele.findElement(productPrice).getText();
             Map<String, String> expectedProductData = ShoppingCartPage.allProducts.stream().filter(map -> map.get("productName").equalsIgnoreCase(productName)).findFirst().get();
             Assert.assertEquals(productName, expectedProductData.get("productName"), "Product Name didn't match");
+            ExtentReporter.logPass("Validated product name in order summary");
             Assert.assertEquals(quantity, expectedProductData.get("quantity"), "Quantity didn't match");
+            ExtentReporter.logPass("Validated product quantity in order summary");
             Assert.assertEquals(price, expectedProductData.get("price"), "Price didn't match");
             ExtentReporter.attachScreenshot(getScreenshotAsBase64(ele), "Validated details of the item :" + productName + " in the Order summary");
         });
     }
+
+    /*
+       Click on Proceed with next button to land on Review and Payments page
+     */
 
     public ReviewAndPaymentsPage ProceedWithNext() {
         nextButton.click();
@@ -137,10 +167,18 @@ public class ShippingPage extends AbstractPage {
         return new ReviewAndPaymentsPage(driver);
     }
 
+    /*
+       Validate that the Sign In link is present when user tries to place and order without signing in.
+     */
+
     public void validateSignInLink() {
         signIn.isDisplayed();
         ExtentReporter.attachScreenshot(getScreenshotAsBase64(), "Signin link is present");
     }
+
+    /*
+       User adds the shipping details when not already signed in.
+     */
 
     public void addShippingDetails(Map<String, Object> data) {
         emailAddress.sendKeys(data.get("shippingEmailAddress").toString());

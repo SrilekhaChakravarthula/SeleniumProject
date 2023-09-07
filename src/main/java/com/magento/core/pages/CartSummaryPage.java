@@ -39,6 +39,10 @@ public class CartSummaryPage extends AbstractPage {
         waitForElementToBeDisplayed(proceedToCheckOut);
     }
 
+    /*
+       Validate the products in cart summary dialog using the map created with product details while adding them to the cart
+     */
+
     public void validateItemsInCartSummarySection() {
         int expectedCountOfProducts = itemDetails.size();
         int actualCountOfProducts = minicart.size();
@@ -61,15 +65,24 @@ public class CartSummaryPage extends AbstractPage {
             String itemPriceInCart = element.findElement(productPrice).getText();
             System.out.println(itemNameInItemDetails + ":" + itemPriceInCart);
             Assert.assertTrue(itemPriceInCart.equalsIgnoreCase(itemPrice));
+            ExtentReporter.logPass("Validated that the details of "+itemNameInItemDetails+" in the summary section");
             ExtentReporter.attachScreenshot(getScreenshotAsBase64(cartItem), "Validated cart item : " + itemNameInItemDetails + " and its price : " + itemPriceInCart);
         }
     }
+
+    /*
+        Click on View and Edit Cart to navigate to the Shopping Cart page
+     */
 
     public ShoppingCartPage clickOnViewAndEditCart() {
         viewAndEditCart.isDisplayed();
         viewAndEditCart.click();
         return new ShoppingCartPage(driver);
     }
+
+    /*
+       Click on proceed to checkout button in the cart summary dialog.
+     */
 
     public ShippingPage proceedToCheckout(){
         proceedToCheckOut.click();

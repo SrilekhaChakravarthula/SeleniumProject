@@ -7,8 +7,8 @@ import org.testng.annotations.Test;
 
 public class SQLInjectionTest extends Hooks {
     SignInPage signInPage;
-    @Test(testName = "XSS Vulnerability Test")
-    public void testXSSVulnerability(){
+    @Test(testName = "SQL Injection Test")
+    public void testSQLInjection(){
         LandingPage landingPage = new LandingPage(driver.get());
         signInPage = landingPage.navigateToSignInPage();
         signInPage.doSignInSQLInjection();

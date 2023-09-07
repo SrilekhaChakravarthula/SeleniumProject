@@ -1,50 +1,61 @@
 package com.magento.core.utils;
 
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
 
 public class Listeners implements ITestListener {
     @Override
     public void onTestStart(ITestResult result) {
-        ITestListener.super.onTestStart(result);
+
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        ITestListener.super.onTestSuccess(result);
+
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        String img = ((TakesScreenshot) Hooks.driver.get()).getScreenshotAs(OutputType.BASE64);
-        ExtentReporter.attachScreenshot(img);
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        ITestListener.super.onTestSkipped(result);
+        String testSetName = result.getTestClass().getRealClass().getSimpleName();
+        Method method = result.getMethod().getConstructorOrMethod().getMethod();
+        Test test = method.getAnnotation(Test.class);
+        String testName = test.testName();
+        ExtentTest extentTest = ExtentReporter.eReports.get().createTest(testName);
+        ExtentReporter.eTest.set(extentTest);
+        ExtentReporter.eTest.get().assignCategory(testSetName);
+        ExtentReporter.eTest.get().log(Status.SKIP, "Test Skipped: " + testName + ". Assigned Category: " + testSetName);
+        org.testng.Reporter.log("Thread - " + Thread.currentThread().getId() + ": " + "Test Skipped: " + testName + ". Assigned Category: " + testSetName, true);
     }
 
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-        ITestListener.super.onTestFailedButWithinSuccessPercentage(result);
+
     }
 
     @Override
     public void onTestFailedWithTimeout(ITestResult result) {
-        ITestListener.super.onTestFailedWithTimeout(result);
+
     }
 
     @Override
     public void onStart(ITestContext context) {
-        ITestListener.super.onStart(context);
+
     }
 
     @Override
     public void onFinish(ITestContext context) {
-        ITestListener.super.onFinish(context);
+
     }
 }

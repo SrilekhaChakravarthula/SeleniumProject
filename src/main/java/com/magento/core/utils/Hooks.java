@@ -37,9 +37,9 @@ public class Hooks {
         options.addArguments("start-maximized");
         WebDriver webDriver = new ChromeDriver(options);
         driver.set(webDriver);
-        driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-        driver.get().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
-        driver.get().manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
+        driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        //driver.get().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+        //driver.get().manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
         driver.get().get(environment.getAppUrl());
     }
 
